@@ -70,53 +70,6 @@ function prompt_git_short_f() {
 local prompt_git='$(prompt_git_f)'
 local prompt_git_short='$(prompt_git_short_f)'
 
-
-# Ruby prompt
-RUBY_PROMPT_PREFIX="["
-RUBY_PROMPT_SUFFIX="]"
-RUBY_PROMPT_COLOR_DISABLED="$YELLOW"
-RUBY_PROMPT_COLOR_ENABLED="$YELLOW_BOLD"
-RUBY_PROMPT_COLOR_BRACES="$WHITE"
-
-function prompt_ruby_f() {
-	local rvm_info=''
-	if which rvm-prompt &> /dev/null; then
-		rvm_info=$(rvm-prompt i v g)
-	elif which rbenv &> /dev/null; then
-		rvm_info=$(rbenv version | sed -e "s/ (set.*$//")
-
-	fi
-
-	if [[ $rvm_info == *@* ]]; then
-		echo "%{$RUBY_PROMPT_COLOR_BRACES%}${RUBY_PROMPT_PREFIX}%{$RUBY_PROMPT_COLOR_ENABLED%}${rvm_info}%{$RUBY_PROMPT_COLOR_BRACES%}${RUBY_PROMPT_SUFFIX}%{$RESET_COLOR%} "
-	else
-		echo "%{$RUBY_PROMPT_COLOR_BRACES%}${RUBY_PROMPT_PREFIX}%{$RUBY_PROMPT_COLOR_DISABLED%}${rvm_info}%{$RUBY_PROMPT_COLOR_BRACES%}${RUBY_PROMPT_SUFFIX}%{$RESET_COLOR%} "
-	fi
-}
-local prompt_ruby='$(prompt_ruby_f)'
-
-
-# Python prompt
-PYTHON_PROMPT_PREFIX="["
-PYTHON_PROMPT_SUFFIX="]"
-PYTHON_PROMPT_COLOR_DISABLED="$YELLOW"
-PYTHON_PROMPT_COLOR_ENABLED="$YELLOW_BOLD"
-PYTHON_PROMPT_COLOR_BRACES="$WHITE"
-
-function prompt_py_f() {
-	local python_info=''
-	if which python &> /dev/null; then
-		python_info="$(python_version_info)$(virtualenv_prompt_info)"
-	fi
-
-	if [[ $python_info == *@* ]]; then
-		echo "%{$PYTHON_PROMPT_COLOR_BRACES%}${RUBY_PROMPT_PREFIX}%{$PYTHON_PROMPT_COLOR_ENABLED%}${python_info}%{$PYTHON_PROMPT_COLOR_BRACES%}${RUBY_PROMPT_SUFFIX}%{$RESET_COLOR%} "
-	else
-		echo "%{$PYTHON_PROMPT_COLOR_BRACES%}${RUBY_PROMPT_PREFIX}%{$PYTHON_PROMPT_COLOR_DISABLED%}${python_info}%{$PYTHON_PROMPT_COLOR_BRACES%}${RUBY_PROMPT_SUFFIX}%{$RESET_COLOR%} "
-	fi
-}
-local prompt_py='$(prompt_py_f)'
-
 function get_user_at_host() {
 	local host_color=''
 	local user_color=''
@@ -159,5 +112,5 @@ local return_code="%(?..[%{$RED_BOLD%}%?%{$RESET_COLOR%}] )"
 PROMPT="
 ┌─[${user_host}]─${current_dir}${prompt_git}
 └─${prompt_git_short}${user_prompt} "
-#RPS1="%{$(echotc UP 1)%}${return_code}${current_time}${prompt_py}${prompt_ruby}%{$(echotc DO 1)%}"
-RPS1="${return_code}${current_time}${prompt_py}${prompt_ruby}"
+#RPS1="%{$(echotc UP 1)%}${return_code}${current_time}%{$(echotc DO 1)%}"
+RPS1="${return_code}${current_time}"
