@@ -1,202 +1,95 @@
-source "$HOME/.rvm/scripts/rvm"
-export PATH="$PATH:$HOME/.cabal/bin"
+source /usr/share/zsh/share/antigen.zsh
 
-export TERM=rxvt-256color
-export _JAVA_AWT_WM_NONREPARENTING=1
-export PULSE_LATENCY_MSEC=60
+antigen use oh-my-zsh
 
-# Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+antigen bundle aws
+antigen bundle git
+antigen bundle gitfast
+antigen bundle git-extras
+antigen bundle colorize
+antigen bundle extract
+antigen bundle docker
+antigen bundle history
+#antigen bundle kubectl
+antigen bundle kube-ps1
+antigen bundle pip
+antigen bundle python
+#antigen bundle ssh-agent
+antigen bundle sudo
+antigen bundle tmux
+antigen bundle tmuxinator
+antigen bundle vagrant
+antigen bundle virtualenv
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="hake5"
+antigen bundle MichaelAquilina/zsh-autoswitch-virtualenv
+antigen bundle lukechilds/zsh-nvm
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle unixorn/autoupdate-antigen.zshplugin
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+antigen theme https://github.com/mariusrejdak/zsh-config.git marius.zsh-theme
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+antigen apply
 
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+setopt inc_append_history
+setopt share_history
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+source /usr/share/nvm/init-nvm.sh
+source /etc/profile.d/jre.sh
+eval "$(direnv hook zsh)"
 
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+export HOST=$HOST
+export EDITOR=vim
+#export PATH=$HOME/.bin:$HOME/.local/bin:$PATH
+export PATH=$HOME/.bin:$HOME/.local/bin:$HOME/projects/go/bin:$PATH
+#export GOPATH=$HOME/projects/go
+export WORKON_HOME=$HOME/.virtualenvs
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+[[ "$COLORTERM" == "xfce4-terminal" ]] && export TERM=xterm-256color
 
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+alias s='git status -sb'
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+# Pretty json
+alias pjson='python -m json.tool'
+# alias cat='bat'
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+alias mfa='oathtool --totp -b "A7QSDFAI7LHJADILTJA5TSZE7E2E2RJLZNDA3WJCI55Z5GA45C3NJROZSFJ3IWAM"'
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
+# Disable autocorrect
+unsetopt correct_all
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+# autoload -U bashcompinit
+# bashcompinit
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git archlinux colorize extract rvm rails virtualenv virtualenvwrapper)
+#bindkey "^[[7~" beginning-of-line #Home key
+#bindkey "^[[8~" end-of-line #End key
+#bindkey "^[[3~" kill-word # control + delete
 
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-	export EDITOR='vim'
-else
-	export EDITOR='vim'
-fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-export SSH_KEY_PATH="~/.ssh/id_rsa"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-HISTSIZE=10000
-DIRSTACKSIZE=10
-
-# Aliasesdd
-alias upgrade="pacaur -Syu && sudo pacman -Scc && sudo pacman-optimize"
-alias s="git status"
-
-alias cp='cp -v'
-alias rcp='rsync -v --progress'
-alias rmv='rsync -v --progress --remove-source-files'
-alias mv='mv -v'
-alias rm='rm -v'
-alias rmdir='rmdir -v'
-alias ln='ln -v'
-alias chmod="chmod -c"
-alias chown="chown -c"
-
-if command -v colordiff > /dev/null 2>&1; then
-	alias diff="colordiff -Nuar"
-else
-	alias diff="diff -Nuar"
-fi
-
-alias grep='grep --colour=auto'
-alias egrep='egrep --colour=auto'
-alias ls='ls --color=auto --human-readable --group-directories-first --classify'
-
-# Keys.
-case $TERM in
-	rxvt*|xterm*)
-		bindkey "^[[7~" beginning-of-line #Home key
-		bindkey "^[[8~" end-of-line #End key
-		bindkey "^[[3~" delete-char #Del key
-		#bindkey "^[[A" history-beginning-search-backward #Up Arrow
-		#bindkey "^[[B" history-beginning-search-forward #Down Arrow
-		bindkey "^[[A" history-search-backward #Up Arrow
-		bindkey "^[[B" history-search-forward #Down Arrow
-		bindkey "^[Oc" forward-word # control + right arrow
-		bindkey "^[Od" backward-word # control + left arrow
-		bindkey "^H" backward-kill-word # control + backspace
-		bindkey "^[[3^" kill-word # control + delete
-	;;
-
-	linux)
-		bindkey "^[[1~" beginning-of-line #Home key
-		bindkey "^[[4~" end-of-line #End key
-		bindkey "^[[3~" delete-char #Del key
-		#bindkey "^[[A" history-beginning-search-backward
-		#bindkey "^[[B" history-beginning-search-forward
-		bindkey "^[[A" history-search-backward #Up Arrow
-		bindkey "^[[B" history-search-forward #Down Arrow
-	;;
-
-	screen|screen-*)
-		bindkey "^[[1~" beginning-of-line #Home key
-		bindkey "^[[4~" end-of-line #End key
-		bindkey "^[[3~" delete-char #Del key
-		#bindkey "^[[A" history-beginning-search-backward #Up Arrow
-		#bindkey "^[[B" history-beginning-search-forward #Down Arrow
-		bindkey "^[[A" history-search-backward #Up Arrow
-		bindkey "^[[B" history-search-forward #Down Arrow
-		bindkey "^[Oc" forward-word # control + right arrow
-		bindkey "^[Od" backward-word # control + left arrow
-		bindkey "^H" backward-kill-word # control + backspace
-		bindkey "^[[3^" kill-word # control + delete
-	;;
-esac
-
-bindkey "^R" history-incremental-pattern-search-backward
-bindkey "^S" history-incremental-pattern-search-forward
-
-[ -r /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# [ -r /usr/share/zsh/scripts/antigen/antigen.zsh ] && source /usr/share/zsh/scripts/antigen/antigen.zsh
-[ -r /etc/profile.d/cnf.sh ] && . /etc/profile.d/cnf.sh
-
-autoload -U zmv zargs
-
-# completion
-autoload -Uz compinit
-compinit
-zstyle ':completion:*' matcher-list ' m:{a-z}={A-Z}'
-zstyle ':completion:*' completer _expand _complete _ignored _approximate
-zstyle ':completion:*' menu select=2
-zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
-zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion:*:descriptions' format '%U%F{cyan}%d%f%u'
-
-
-DIRSTACKFILE="$HOME/.zshdir"
-if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
-	dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
-	[[ -d $dirstack[1] ]] && cd $dirstack[1]
-fi
-chpwd() {
-	if [[ ! $PWD == *.virtualenvs* ]]; then
-		print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
-	fi
+function man() {
+    env LESS_TERMCAP_mb=$'\E[1;31m'   `# blink `    \
+        LESS_TERMCAP_md=$'\E[1;32m'   `# bold `     \
+        LESS_TERMCAP_me=$'\E[0m'                    \
+        LESS_TERMCAP_se=$'\E[0m'                    \
+        LESS_TERMCAP_so=$'\E[7m'      `# standout ` \
+        LESS_TERMCAP_ue=$'\E[0m'                    \
+        LESS_TERMCAP_us=$'\E[1;4;34m' `# underline` \
+        /usr/bin/man "$@"
 }
 
-setopt autopushd pushdsilent pushdtohome
-setopt interactivecomments
+pasteinit() {
+  OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
+  zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
+}
 
-## Remove duplicate entries
-setopt pushdignoredups
+pastefinish() {
+  zle -N self-insert $OLD_SELF_INSERT
+}
+zstyle :bracketed-paste-magic paste-init pasteinit
+zstyle :bracketed-paste-magic paste-finish pastefinish
 
-## This reverts the +/- operators.
-setopt pushdminus
-# correction
-setopt correctall
-setopt completealiases
-setopt hist_ignore_dups
-setopt hist_ignore_space
-setopt extendedGlob
-setopt noflowcontrol
-setopt promptsubst
+if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+        source /etc/profile.d/vte.sh
+fi
+
+if [[ -f "$HOME/.zshrc_local" ]]; then
+	source $HOME/.zshrc_local
+fi

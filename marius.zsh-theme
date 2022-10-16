@@ -51,6 +51,15 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$BLUE_BOLD%}…%{$RESET_COLOR%}"
 ZSH_THEME_GIT_PROMPT_SHA_BEFORE="%{$GIT_PROMPT_COLOR1%}"
 ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$RESET_COLOR%}"
 
+# Format for kube_ps1()
+KUBE_PS1_SYMBOL_ENABLE="false"
+KUBE_PS1_NS_ENABLE="false"
+KUBE_PS1_PREFIX="─["
+KUBE_PS1_SUFFIX="]"
+KUBE_PS1_PREFIX_COLOR="white"
+KUBE_PS1_SUFFIX_COLOR="white"
+KUBE_PS1_CTX_COLOR="blue"
+
 function prompt_git_f() {
 	local PREFIX="%{$GIT_PROMPT_COLOR2%}${GIT_PROMPT_PREFIX}%{$RESET_COLOR%}"
 	local SUFFIX="%{$GIT_PROMPT_COLOR2%}${GIT_PROMPT_SUFFIX}%{$RESET_COLOR%}"
@@ -69,6 +78,7 @@ function prompt_git_short_f() {
 
 local prompt_git='$(prompt_git_f)'
 local prompt_git_short='$(prompt_git_short_f)'
+local prompt_kube='$(kube_ps1)'
 
 function get_user_at_host() {
 	local host_color=''
@@ -78,7 +88,7 @@ function get_user_at_host() {
 		user_color="%{$RED_BOLD%}"
 		host_color="%{$RED_BOLD%}"
 	else
-		if [[ $USER == hake5 ]]; then
+		if [[ $USER == marius ]]; then
 			user_color="%{$GREEN_BOLD%}"
 		else
 			user_color="%{$MAGENTA_BOLD%}"
@@ -110,7 +120,7 @@ local return_code="%(?..[%{$RED_BOLD%}%?%{$RESET_COLOR%}] )"
 
 
 PROMPT="
-┌─[${user_host}]─${current_dir}${prompt_git}
+┌─[${user_host}]─${current_dir}${prompt_git}${prompt_kube}
 └─${prompt_git_short}${user_prompt} "
 #RPS1="%{$(echotc UP 1)%}${return_code}${current_time}%{$(echotc DO 1)%}"
 RPS1="${return_code}${current_time}"
